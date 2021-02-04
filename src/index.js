@@ -166,6 +166,7 @@ const components = [
   CollapseTransition
 ];
 
+//重写Install方法
 const install = function(Vue, opts = {}) {
   locale.use(opts.locale);
   locale.i18n(opts.i18n);
@@ -194,9 +195,10 @@ const install = function(Vue, opts = {}) {
 
 /* istanbul ignore if */
 if (typeof window !== 'undefined' && window.Vue) {
+  // 注册element组件
   install(window.Vue);
 }
-
+//抛出所有组件
 export default {
   version: '2.15.0',
   locale: locale.use,
