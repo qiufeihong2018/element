@@ -1,3 +1,6 @@
+// demo见官网transition
+// https://element.eleme.cn/#/zh-CN/component/transition
+// 内置过渡动画
 import { addClass, removeClass } from 'element-ui/src/utils/dom';
 
 class Transition {
