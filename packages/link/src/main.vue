@@ -27,20 +27,26 @@ export default {
   name: 'ElLink',
 
   props: {
+  //类型：primary、success、warning、danger、info
     type: {
       type: String,
       default: 'default'
     },
+   // 有无下划线
     underline: {
       type: Boolean,
       default: true
     },
+    //是否禁用
     disabled: Boolean,
+    //跳转地址
     href: String,
+    //图标
     icon: String
   },
 
   methods: {
+  //点击链接
     handleClick(event) {
       if (!this.disabled) {
         if (!this.href) {
