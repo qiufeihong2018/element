@@ -1,3 +1,5 @@
+// 全局注册Container
+// https://element.eleme.cn/#/zh-CN/component/container
 import Container from './src/main';
 
 /* istanbul ignore next */
