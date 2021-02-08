@@ -1,3 +1,4 @@
+// 注册icon https://element.eleme.cn/#/zh-CN/component/icon
 import ElIcon from './src/icon.vue';
 
 /* istanbul ignore next */
