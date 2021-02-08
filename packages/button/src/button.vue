@@ -25,7 +25,7 @@
 <script>
   export default {
     name: 'ElButton',
-
+    //从父组件中拿到表单和表单项对象
     inject: {
       elForm: {
         default: ''
