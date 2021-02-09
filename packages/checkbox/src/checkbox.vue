@@ -1,4 +1,5 @@
 <template>
+// 添加属性
   <label
     class="el-checkbox"
     :class="[
@@ -21,6 +22,7 @@
       :aria-checked="indeterminate ? 'mixed' : false"
     >
       <span class="el-checkbox__inner"></span>
+      // 选中的input样式
       <input
         v-if="trueLabel || falseLabel"
         class="el-checkbox__original"
@@ -34,6 +36,7 @@
         @change="handleChange"
         @focus="focus = true"
         @blur="focus = false">
+        // 未选中的input样式
       <input
         v-else
         class="el-checkbox__original"
@@ -81,6 +84,7 @@
     },
 
     computed: {
+ //   v-model绑定的值
       model: {
         get() {
           return this.isGroup
@@ -107,7 +111,7 @@
           }
         }
       },
-
+      // 是否勾选
       isChecked() {
         if ({}.toString.call(this.model) === '[object Boolean]') {
           return this.model;
@@ -117,10 +121,11 @@
           return this.model === this.trueLabel;
         }
       },
-
+      // 计算是否是组
       isGroup() {
         let parent = this.$parent;
         while (parent) {
+        //父级组件名是否是el-checkbox-group，是的话返回true，否的话，父级的父级重新递归，
           if (parent.$options.componentName !== 'ElCheckboxGroup') {
             parent = parent.$parent;
           } else {
@@ -130,29 +135,31 @@
         }
         return false;
       },
-
+      // 选中值
       store() {
+      // 如果是多选框组，返回多选框绑定的值，否则返回单选框的绑定的值
         return this._checkboxGroup ? this._checkboxGroup.value : this.value;
       },
 
       /* used to make the isDisabled judgment under max/min props */
+      // 限制个数
       isLimitDisabled() {
         const { max, min } = this._checkboxGroup;
         return !!(max || min) &&
           (this.model.length >= max && !this.isChecked) ||
           (this.model.length <= min && this.isChecked);
       },
-
+      //是否禁用
       isDisabled() {
         return this.isGroup
           ? this._checkboxGroup.disabled || this.disabled || (this.elForm || {}).disabled || this.isLimitDisabled
           : this.disabled || (this.elForm || {}).disabled;
       },
-
+      //表单项尺寸
       _elFormItemSize() {
         return (this.elFormItem || {}).elFormItemSize;
       },
-
+      //选择框尺寸
       checkboxSize() {
         const temCheckboxSize = this.size || this._elFormItemSize || (this.$ELEMENT || {}).size;
         return this.isGroup
@@ -162,21 +169,32 @@
     },
 
     props: {
+    //v-model绑定值
       value: {},
+    //  选中的标签值
       label: {},
+    //  表示checkbox的不确定状态，一般用于实现全选的效果
       indeterminate: Boolean,
+     // 是否禁用
       disabled: Boolean,
+      //是否勾选
       checked: Boolean,
+      //原生name属性
       name: String,
+      //选中时的值
       trueLabel: [String, Number],
+      //没有选中时的值
       falseLabel: [String, Number],
       id: String, /* 当indeterminate为真时，为controls提供相关连的checkbox的id，表明元素间的控制关系*/
       controls: String, /* 当indeterminate为真时，为controls提供相关连的checkbox的id，表明元素间的控制关系*/
+      // 是否显示边框
       border: Boolean,
+      //尺寸
       size: String
     },
 
     methods: {
+    // 如果被勾选标签没有在绑定值中找到，那就塞进去。否则绑定值就是选中值或者true（单选框）
       addToStore() {
         if (
           Array.isArray(this.model) &&
@@ -187,6 +205,7 @@
           this.model = this.trueLabel || true;
         }
       },
+      //绑定值变了触发的事件
       handleChange(ev) {
         if (this.isLimitExceeded) return;
         let value;
@@ -197,6 +216,7 @@
         }
         this.$emit('change', value, ev);
         this.$nextTick(() => {
+        // 是群组的话，往上传值
           if (this.isGroup) {
             this.dispatch('ElCheckboxGroup', 'change', [this._checkboxGroup.value]);
           }
