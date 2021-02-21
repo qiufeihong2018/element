@@ -1,4 +1,5 @@
 <template>
+     <!-- 动态class -->
   <div :class="[
     type === 'textarea' ? 'el-textarea' : 'el-input',
     inputSize ? 'el-input--' + inputSize : '',
@@ -143,9 +144,13 @@
     },
 
     props: {
+   // 绑定值
       value: [String, Number],
+      // input的尺寸
       size: String,
+      //控制是否能被用户缩放	string	none, both, horizontal, vertical（具体效果未知）
       resize: String,
+      //原生属性	string（具体效果未知）
       form: String,
       disabled: Boolean,
       readonly: Boolean,
