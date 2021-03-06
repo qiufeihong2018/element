@@ -121,9 +121,15 @@
     componentName: 'ElInput',
 
     mixins: [emitter, Migrating],
+/**官方解释：默认情况下父作用域的不被认作 props 的 attribute 绑定 (attribute bindings) 将会“回退”且作为普通的 HTML attribute 应用在子组件的根元素上。当撰写包裹一个目标元素或另一个组件的组件时，这可能不会总是符合预期行为。通过设置 inheritAttrs 到 false，这些默认行为将会被去掉。而通过 (同样是 2.4 新增的) 实例 property $attrs 可以让这些 attribute 生效，且可以通过 v-bind 显性的绑定到非根元素上。
 
+注意：这个选项不影响 class 和 style 绑定。
+
+就是说，inheritAttrs为true，a组件中的b组件有属性c，那么b组件渲染出来的dom会带上c。否则，就不带。
+https://www.cnblogs.com/luyuefeng/p/11106172.html
+**/
     inheritAttrs: false,
-
+//接受父组件中的表单和表单项
     inject: {
       elForm: {
         default: ''
@@ -152,16 +158,21 @@
       resize: String,
       //原生属性	string（具体效果未知）
       form: String,
+//是否禁用
       disabled: Boolean,
+//是否内容只读
       readonly: Boolean,
+//input类型（text，textarea 和其他 原生 input 的 type 值）
       type: {
         type: String,
         default: 'text'
       },
+//自适应内容高度，只对 type="textarea" 有效，可传入对象，如，{ minRows: 2, maxRows: 6 }
       autosize: {
         type: [Boolean, Object],
         default: false
       },
+//原生属性，自动补全	
       autocomplete: {
         type: String,
         default: 'off'
@@ -175,38 +186,51 @@
           return true;
         }
       },
+//输入时是否触发表单的校验
       validateEvent: {
         type: Boolean,
         default: true
       },
+//输入框尾部图标
       suffixIcon: String,
+//输入框头部图标
       prefixIcon: String,
+//输入框关联的label文字
       label: String,
+//是否可清空
       clearable: {
         type: Boolean,
         default: false
       },
+//是否显示切换密码图标
       showPassword: {
         type: Boolean,
         default: false
       },
+//是否显示输入字数统计，只在 type = "text" 或 type = "textarea" 时有效
       showWordLimit: {
         type: Boolean,
         default: false
       },
+//	输入框的tabindex
       tabindex: String
     },
 
     computed: {
+//表单项尺寸
       _elFormItemSize() {
         return (this.elFormItem || {}).elFormItemSize;
       },
+//表单项的校验值
       validateState() {
         return this.elFormItem ? this.elFormItem.validateState : '';
       },
+//状态图标
       needStatusIcon() {
         return this.elForm ? this.elForm.statusIcon : false;
       },
+//校验图标 
+//字典中查找，加快性能
       validateIcon() {
         return {
           validating: 'el-icon-loading',
@@ -214,6 +238,7 @@
           error: 'el-icon-circle-close'
         }[this.validateState];
       },
+//表单上绑定的属性和输入框绑定的相结合
       textareaStyle() {
         return merge({}, this.textareaCalcStyle, { resize: this.resize });
       },
@@ -223,9 +248,11 @@
       inputDisabled() {
         return this.disabled || (this.elForm || {}).disabled;
       },
+//原生输入框的值
       nativeInputValue() {
         return this.value === null || this.value === undefined ? '' : String(this.value);
       },
+//是否开放清除功能
       showClear() {
         return this.clearable &&
           !this.inputDisabled &&
@@ -233,12 +260,14 @@
           this.nativeInputValue &&
           (this.focused || this.hovering);
       },
+//是否开放密码查看功能
       showPwdVisible() {
         return this.showPassword &&
           !this.inputDisabled &&
           !this.readonly &&
           (!!this.nativeInputValue || this.focused);
       },
+//下同
       isWordLimitVisible() {
         return this.showWordLimit &&
           this.$attrs.maxlength &&
@@ -247,6 +276,7 @@
           !this.readonly &&
           !this.showPassword;
       },
+//输入框的最大长度
       upperLimit() {
         return this.$attrs.maxlength;
       },
@@ -265,6 +295,7 @@
     },
 
     watch: {
+//监听绑定的值，如果变了，触发表单项的change事件
       value(val) {
         this.$nextTick(this.resizeTextarea);
         if (this.validateEvent) {
