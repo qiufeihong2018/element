@@ -1,5 +1,7 @@
+//通过行数计算输入框的高度
 let hiddenTextarea;
 
+//隐藏样式
 const HIDDEN_STYLE = `
   height:0 !important;
   visibility:hidden !important;
@@ -59,7 +61,7 @@ export default function calcTextareaHeight(
     hiddenTextarea = document.createElement('textarea');
     document.body.appendChild(hiddenTextarea);
   }
-
+// 解构赋值
   let {
     paddingSize,
     borderSize,
@@ -80,8 +82,9 @@ export default function calcTextareaHeight(
   }
 
   hiddenTextarea.value = '';
+//   单行的高度
   let singleRowHeight = hiddenTextarea.scrollHeight - paddingSize;
-
+// 最小行对应的高度
   if (minRows !== null) {
     let minHeight = singleRowHeight * minRows;
     if (boxSizing === 'border-box') {
@@ -90,6 +93,7 @@ export default function calcTextareaHeight(
     height = Math.max(minHeight, height);
     result.minHeight = `${ minHeight }px`;
   }
+//   最大行对应的高度
   if (maxRows !== null) {
     let maxHeight = singleRowHeight * maxRows;
     if (boxSizing === 'border-box') {
