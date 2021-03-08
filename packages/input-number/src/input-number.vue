@@ -1,4 +1,5 @@
 <template>
+<!-- 取消拖动 -->
   <div
     @dragstart.prevent
     :class="[
@@ -154,6 +155,7 @@
       }
     },
     computed: {
+        // 最小值按钮的禁用
       minDisabled() {
         return this._decrease(this.value, this.step) < this.min;
       },
@@ -161,10 +163,12 @@
         return this._increase(this.value, this.step) > this.max;
       },
       numPrecision() {
+        //   解构赋值
         const { value, step, getPrecision, precision } = this;
         const stepPrecision = getPrecision(step);
         if (precision !== undefined) {
           if (stepPrecision > precision) {
+            //   [Element Warn][InputNumber]精度不应该小于step的小数点
             console.warn('[Element Warn][InputNumber]precision should not be less than the decimal places of step');
           }
           return precision;
@@ -172,15 +176,18 @@
           return Math.max(getPrecision(value), stepPrecision);
         }
       },
+    //   按钮是否放在右侧
       controlsAtRight() {
         return this.controls && this.controlsPosition === 'right';
       },
       _elFormItemSize() {
         return (this.elFormItem || {}).elFormItemSize;
       },
+    //   统计计数器的尺寸 
       inputNumberSize() {
         return this.size || this._elFormItemSize || (this.$ELEMENT || {}).size;
       },
+    //   统计计数器是否禁用
       inputNumberDisabled() {
         return this.disabled || !!(this.elForm || {}).disabled;
       },
@@ -211,6 +218,12 @@
         if (precision === undefined) precision = this.numPrecision;
         return parseFloat(Math.round(num * Math.pow(10, precision)) / Math.pow(10, precision));
       },
+      /**
+       * 获取小数点后位数
+       */
+    //   value=1 return 1
+    // value=1.1 return 1
+    // value=2.2 return 1
       getPrecision(value) {
         if (value === undefined) return 0;
         const valueString = value.toString();
@@ -228,6 +241,10 @@
         // Solve the accuracy problem of JS decimal calculation by converting the value to integer.
         return this.toPrecision((precisionFactor * val + precisionFactor * step) / precisionFactor);
       },
+      /**
+       * val：值
+       * step：步长
+       */
       _decrease(val, step) {
         if (typeof val !== 'number' && val !== undefined) return this.currentValue;
 
@@ -241,6 +258,7 @@
         const newVal = this._increase(value, this.step);
         this.setCurrentValue(newVal);
       },
+    //   减小事件
       decrease() {
         if (this.inputNumberDisabled || this.minDisabled) return;
         const value = this.value || 0;
@@ -253,6 +271,7 @@
       handleFocus(event) {
         this.$emit('focus', event);
       },
+    //   设置当前值
       setCurrentValue(newVal) {
         const oldVal = this.currentValue;
         if (typeof newVal === 'number' && this.precision !== undefined) {
