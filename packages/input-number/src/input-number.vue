@@ -64,40 +64,54 @@
     directives: {
       repeatClick: RepeatClick
     },
+    // 复用输入框组件
     components: {
       ElInput
     },
     props: {
+        // 步长
       step: {
         type: Number,
         default: 1
       },
+    //   是否只能输入 step 的倍数
       stepStrictly: {
         type: Boolean,
         default: false
       },
+    //   最大输入值
       max: {
         type: Number,
         default: Infinity
       },
+    //   最小输入值
       min: {
         type: Number,
         default: -Infinity
       },
+    //   绑定值
       value: {},
+    //   禁用
       disabled: Boolean,
+    //   尺寸
       size: String,
+    //   控制按钮
       controls: {
         type: Boolean,
         default: true
       },
+    //   按钮位置
       controlsPosition: {
         type: String,
         default: ''
       },
+    //   原生属性
       name: String,
+    //   关联的标签名字
       label: String,
+    //   占位符
       placeholder: String,
+    //   数值精度
       precision: {
         type: Number,
         validator(val) {
